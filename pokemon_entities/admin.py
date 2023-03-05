@@ -3,3 +3,4 @@ from .models import Pokemon, PokemonEntity
 
 admin.site.register(Pokemon)
 admin.site.register(PokemonEntity)
+
