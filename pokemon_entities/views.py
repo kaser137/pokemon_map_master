@@ -1,6 +1,8 @@
 import folium
 import json
-
+import os
+from pathlib import Path
+import pathlib
 from django.http import HttpResponseNotFound, HttpRequest
 from django.shortcuts import render
 from .models import Pokemon, PokemonEntity
@@ -39,14 +41,12 @@ def show_all_pokemons(request):
             )
 
     pokemons_on_page = []
-    for pokemon_entity in pokemon_entities:
-        if localtime(pokemon_entity.appeared_at) <= localtime() <= localtime(pokemon_entity.disappeared_at):
-            pokemons_on_page.append({
-                'pokemon_id': pokemon_entity.pokemon.id,
-                'img_url': pokemon_entity.pokemon.photo.path,
-                'title_ru': pokemon_entity.pokemon.title,
-            })
-
+    for pokemon in Pokemon.objects.all():
+        pokemons_on_page.append({
+            'pokemon_id': pokemon.id,
+            'img_url': pokemon.photo.url,
+            'title_ru': pokemon.title,
+        })
     return render(request, 'mainpage.html', context={
         'map': folium_map._repr_html_(),
         'pokemons': pokemons_on_page,
@@ -54,23 +54,22 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon_entities = PokemonEntity.objects.all()
-
-    for pokemon_entity in pokemon_entities:
-        if pokemon_entity.pokemon.id == int(pokemon_id):
-            requested_pokemon_entity = pokemon_entity
+    pokemons = Pokemon.objects.all()
+    for pokemon in pokemons:
+        if pokemon.id == int(pokemon_id):
+            requested_pokemon = pokemon
             break
     else:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    add_pokemon(
-        folium_map, requested_pokemon_entity.lat,
-        requested_pokemon_entity.lon,
-        requested_pokemon_entity.pokemon.photo.path
-    )
-
+    for pokemon_entity in PokemonEntity.objects.filter(pokemon=requested_pokemon):
+        if localtime(pokemon_entity.appeared_at) <= localtime() <= localtime(pokemon_entity.disappeared_at):
+            add_pokemon(
+                folium_map, pokemon_entity.lat,
+                pokemon_entity.lon,
+                requested_pokemon.photo.path
+            )
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': requested_pokemon_entity.pokemon, 'pokemon_id': requested_pokemon_entity.pokemon.id,
-        'title_ru': requested_pokemon_entity.pokemon.title, 'img_url': requested_pokemon_entity.pokemon.photo.path
+        'map': folium_map._repr_html_(), 'title_ru': requested_pokemon.title, 'img_url': requested_pokemon.photo.url
     })
