@@ -1,9 +1,5 @@
 import folium
-import json
-import os
-from pathlib import Path
-import pathlib
-from django.http import HttpResponseNotFound, HttpRequest
+from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from .models import Pokemon, PokemonEntity
 from django.utils.timezone import localtime
