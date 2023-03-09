@@ -18,7 +18,7 @@
     </ul>
     <div class="d-flex mt-5 row">
       <div class="pull-left mr-2 float-left ml-4">
-        <img src="{{img_url}}" style="height:200px; width:200px">
+        <img src="{{pokemon.img_url}}" style="height:200px; width:200px">
       </div>
       <div class="m-2 ml-4 col-11 col-sm-8 col-lg-8 col-xl-8">
         <h1>{{title_ru}}</h1>
@@ -31,9 +31,9 @@
               {% if pokemon.previous_evolution %}
                 <div class="col-5 clearfix p-2 m-2">
                   <div class="img-thumbnail">
-                    <a href="{% url 'pokemon' pokemon.previous_evolution.pokemon_id %}">
+                    <a href="{% url 'pokemon' pokemon.previous_evolution.id %}">
                       <div class="d-flex justify-content-center">
-                        <img class="pull-left mr-2 float-left" src="{{pokemon.previous_evolution.img_url}}" style="height:50px; width:50px">
+                        <img class="pull-left mr-2 float-left" src="{{pokemon.previous_evolution.photo.url}}" style="height:50px; width:50px">
                         <p class="align-middle m-0" style="line-height:50px; font-size: 20px;">{{pokemon.previous_evolution.title_ru}}</p>
                       </div>
                     </a>
@@ -44,9 +44,9 @@
               {% if pokemon.next_evolution %}
                 <div class="col-5 clearfix p-2 m-2">
                   <div class="img-thumbnail">
-                    <a href="{% url 'pokemon' pokemon.next_evolution.pokemon_id %}">
+                    <a href="{% url 'pokemon' pokemon.next_evolution.id %}">
                       <div class="d-flex justify-content-center">
-                        <img class="pull-left mr-2 float-left" src="{{pokemon.next_evolution.img_url}}" style="height:50px; width:50px">
+                        <img class="pull-left mr-2 float-left" src="{{pokemon.next_evolution.photo.url}}" style="height:50px; width:50px">
                         <p class="align-middle m-0" style="line-height:50px; font-size: 20px;">{{pokemon.next_evolution.title_ru}}</p>
                       </div>
                     </a>
@@ -73,7 +73,7 @@
     </div>
 
 
-    <h1 class="mt-5 mb-2">Карта {{title_ru}} в Москве</h1>
+    <h1 class="mt-5 mb-2">Карта {{pokemon.title_ru}} в Москве</h1>
     <div class="mb-5">
       {{map|safe}}  
     </div>

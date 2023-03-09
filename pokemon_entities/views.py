@@ -70,6 +70,11 @@ def show_pokemon(request, pokemon_id):
                 pokemon_entity.lon,
                 requested_pokemon.photo.path
             )
+    pokemon_attributes = {'title_ru': requested_pokemon.title, 'img_url': requested_pokemon.photo.url,
+                          'title_en': requested_pokemon.title_en, 'title_jp': requested_pokemon.title_jp,
+                          'description': requested_pokemon.description,
+                          'next_evolution': requested_pokemon.next_evolution,
+                          'previous_evolution': requested_pokemon.previous_evolution}
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'title_ru': requested_pokemon.title, 'img_url': requested_pokemon.photo.url
+        'map': folium_map._repr_html_(), 'pokemon': pokemon_attributes
     })
