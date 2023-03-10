@@ -35,8 +35,7 @@ def get_photo_path(pokemon):
         return pokemon.photo.path
     except ValueError:
         return DEFAULT_IMAGE_URL
-    except AttributeError:
-        return DEFAULT_IMAGE_URL
+
 
 
 def show_all_pokemons(request):
